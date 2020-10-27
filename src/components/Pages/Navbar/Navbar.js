@@ -35,7 +35,7 @@ export default class Navbar extends Component {
             Zakażenia w Polsce
         </NavLink></StyledLi>
         <StyledLi><NavLink exact to='/kraj' style={{color:'#95a5a6'}} activeStyle={{fontWeight: "700",color: "#ecf0f1"}} className="">
-            Zakażenia w kraju  
+            Zakażenia w krajach  
         </NavLink></StyledLi>
         <li  className="icon" onClick={this.changeNavbar}>
           <i className="fa fa-bars"></i>

@@ -52,6 +52,7 @@ export default class FetchCountryAll extends Component {
         this.state.countryTab.map(item=> {
                 return (
                         <StyledWrapperBig value={parseInt(item.cases)} key={item.country_name}>
+                            {console.log(parseInt(item.cases))}
                             <th>{item.country_name}</th>
                             <th>{item.active_cases}</th>
                             <th>{item.new_cases}</th>
@@ -91,18 +92,13 @@ render() {
     return (
         <div>
             
-            {this.props.allState?(<>
-               
-            </>): null}
-
-
-
+            {this.props.allState?(<></>):null}
             {this.props.newCasesProps ? (<><StyledWrapperTitle><StyledTitle>Coronavirus wykaz wszystkich zakażeń</StyledTitle></StyledWrapperTitle>
            <UlStyl>
-                {newCases?<><LiStyl>Nowe przypadki: </LiStyl> <DescriptionStyl>{newCases} osób.</DescriptionStyl> 
-                <LiStyl>Zgony: </LiStyl> <DescriptionStyl>{newDead} osób</DescriptionStyl> 
-                <LiStyl>W stanie krytycznym:  </LiStyl> <DescriptionStyl>{criticalState} osób</DescriptionStyl> 
-                <LiStyl>Liczba chorych:  </LiStyl> <DescriptionStyl>{allCases} osób</DescriptionStyl></>:null}
+                {newCases?<><LiStyl>Dzisiejsze nowe przypadki covid na świecie: </LiStyl> <DescriptionStyl>{newCases} osób.</DescriptionStyl> 
+                <LiStyl>Dzisiejsze zgody: </LiStyl> <DescriptionStyl>{newDead} osób</DescriptionStyl> 
+                <LiStyl>Osób w stanie krytycznym:  </LiStyl> <DescriptionStyl>{criticalState} osób</DescriptionStyl> 
+                <LiStyl>Liczba wszystkich chorych:  </LiStyl> <DescriptionStyl>{allCases} osób</DescriptionStyl></>:null}
            </UlStyl></>):null}
             
             
@@ -114,7 +110,7 @@ render() {
                         <StyledDay>Aktualizacja z dnia <div> <b>{day}</b></div> </StyledDay>
                         <LiStyleMainPages>Wszystkie przypadki Covid:</LiStyleMainPages> <DescriptionStylMainPages> {allTotalCases} </DescriptionStylMainPages>
                         <LiStyleMainPages>Wszystkie zgony:</LiStyleMainPages> <DescriptionStylMainPages>{allTotalDead} </DescriptionStylMainPages> 
-                        <LiStyleMainPages>Uzdrowieni: </LiStyleMainPages> <DescriptionStylMainPages>{allTotalRecovered} </DescriptionStylMainPages>
+                        <LiStyleMainPages>Wszyscy uzdrowieni: </LiStyleMainPages> <DescriptionStylMainPages>{allTotalRecovered} </DescriptionStylMainPages>
                         
                 </>
                 
@@ -143,7 +139,7 @@ render() {
                          } else {
                          return allTotalCases&&<StyledTable>
                          <thead style={{backgroundColor:'#ecf0f1'}}>
-                         <tr>
+                         <tr style={{background:'#2c3e50'}}>
                              <th>Państwo</th>
                              <th>Liczba chorych</th>
                              <th>Nowe przypadki</th>
@@ -217,7 +213,8 @@ const StyledLi = styled.li`
     }
 `
 const StyledWrapperSmall = styled.div`
-    background-color: ${({value}) => value===1 || value > 250 ? '#660033' : value > 200 ? '#330033' : value>150 ? '#000033' : '#262626' };
+    /* background-color: ${({value}) => value===1 || value > 250 ? '#660033' : value > 200 ? '#330033' : value>150 ? '#000033' : '#262626' }; */
+    background-color: ${({value}) => value===1 || value == 2 ? '#2980b9' : value === 3 || value === 4 ? '#f39c12' : value === 5 || value===6 || value === 7 ?  '#d35400' : value===8 || value===9 ? '#c0392b' : "#2ecc71" };
     margin: 40px;
     color: white;
     border-radius: 10px;
@@ -230,19 +227,21 @@ const StyledWrapperSmall = styled.div`
     }
     ul {
             li:first-of-type{
-                border-bottom: 2px solid ${({value}) => value===1 || value > 250 ? 'rgba(140,0,51,0.7)' : value > 200 ? '#8e44ad' : value>150 ? '#192a56' : '#95a5a6' };
+                border-bottom: 2px solid ${({value}) => value===1 || value == 2 ? '#3498db' : value === 3 || value === 4 ? '#f1c40f' : value === 5 || value===6 || value === 7 ?  '#e67e22' : value===8 || value===9 ? '#e74c3c' : "#27ae60" };
         }
     }
-
+    
 `
 const StyledWrapperBig = styled.tr`
-    background-color: ${({value}) => value===1 || value > 250 ? '#c0392b' : value > 200 ? '#f39c12' : value>150 ? '#f1c40f' : '#2ecc71' };
+    /* background-color: ${({value}) => value > 1000 ? '#c0392b' : value > 200 ? '#f39c12' : value>150 ? '#f1c40f' : '#2ecc71' }; */
+    background-color: ${({value}) => value===1 || value == 2 ? '#2980b9' : value === 3 || value === 4 ? '#f39c12' : value === 5 || value===6 || value === 7 ?  '#d35400' : value===8 || value===9 ? '#c0392b' : "#2ecc71" };
     margin: 40px;
     border-radius: 10px;
     padding: 10px;
     font-family: 'Baloo 2', cursive;
     margin: 0px 20px;
     margin-top: 40px;
+
     @media(min-width: 350px) {
         margin: 40px;
     }
@@ -270,6 +269,7 @@ const DescriptionStylMainPages = styled.div`
     border-radius: 15px;
     padding-top: 8px;
     color: black;
+    max-width: 350px; 
 `
 
 const StyledDay = styled.div`

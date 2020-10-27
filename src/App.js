@@ -10,7 +10,7 @@ function App() {
   return (
 
 
-      <Router basename={process.env.PUBLIC_URL}>
+      <HashRouter basename='/'>
         <div className="App">
             <Navbar/>
         </div>
@@ -22,7 +22,7 @@ function App() {
           {/* <Route exact path={process.env.PUBLIC_URL + '/dzisiaj'} component={ToDayInfection}></Route> */}
           <Route component={Error}></Route>
         </Switch>
-    </Router>
+    </HashRouter>
 
   );
 }

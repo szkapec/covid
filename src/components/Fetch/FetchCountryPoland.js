@@ -7,25 +7,70 @@ import LoadingIndicatior from '../Loading/LoadingIndicator';
 export default class FetchCountryPoland extends Component {
 
         state = {
-            country: '',
-            newConfirmed: '',
-            newDead: '',
-            newRecovery: '',
-            totalInfection: '',
-            totalDead: '',
-            totalRecovery: '',
-            zmien: '',
             globalNewConfirmed: '',
             globalNewDead: '',
             globalNewRecovered: '',
             globalTotalConfirmed: '',
             globalTotalDeaths: '',
             globalTotalRecovered: '',
+            error: '',
+            active: '',
+            activeNew: '',
+            recovered: '',
+            total: '',
+            day: '',
+            totalDeaths: '',
+            newDeaths: '',
+            tests: '',
+            countryApi: '',
         }
         
         componentDidMount(){
             this.performSummary();
+            this.fetchCountry();
         }
+
+        fetchCountry = () => {
+
+            fetch(`https://covid-193.p.rapidapi.com/statistics?country=poland`, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "covid-193.p.rapidapi.com",
+                    "x-rapidapi-key": "40ddf12a2emsh06a2fa2ebef5ecbp10fb02jsn4827ba559849"
+                }
+            })
+        .then(api=> {
+            if(api.ok){
+                return api
+            }
+        })
+        .then(api => api.json())
+        .then(api => {
+            console.log(api)
+           this.setState({
+               error: true,
+               active: api.response[0].cases.active,
+               activeNew: api.response[0].cases.new,
+               recovered: api.response[0].cases.recovered,
+               total: api.response[0].cases.total,
+               day: api.response[0].day,
+               totalDeaths: api.response[0].deaths.total,
+               newDeaths: api.response[0].deaths.new,
+               tests: api.response[0].tests.total,
+                countryApi: api.response[0].country,
+           })
+           
+        })
+        .catch(err => {
+            console.log(err);
+            this.setState({
+                error: false,
+                active: '',
+                countryApi: '',
+            })
+        });
+    }
+
 
         performSummary = () => {
 
@@ -37,21 +82,10 @@ export default class FetchCountryPoland extends Component {
                     if(api.ok){
                         return api
                     }
-                    
                 })
-                
                 .then(api => api.json())
                 .then(api => {
-                    console.log(api)
                     this.setState(() =>  ({
-                        country: api.Countries[132].Country,
-                        newConfirmed: api.Countries[132].NewConfirmed, //nowe potwierdzone przypadki
-                        newDead: api.Countries[132].NewDeaths,
-                        newRecovery: api.Countries[132].NewRecovered,
-                        totalInfection: api.Countries[132].TotalConfirmed,
-                        totalDead: api.Countries[132].TotalDeaths,
-                        totalRecovery: api.Countries[132].TotalRecovered,
-
                         globalNewConfirmed: api.Global.NewConfirmed,
                         globalNewDead: api.Global.NewDeaths,
                         globalNewRecovered: api.Global.NewRecovered,
@@ -68,7 +102,8 @@ export default class FetchCountryPoland extends Component {
             }
     render() {
 
-        const {country, newConfirmed, newDead, newRecovery, totalInfection, totalDead, totalRecovery,
+        const {active, activeNew, recovered, totalDeaths, newDeaths, tests, 
+
             globalNewConfirmed, globalNewDead, globalNewRecovered, globalTotalConfirmed, globalTotalDeaths, globalTotalRecovered} = this.state;
 
 
@@ -76,15 +111,14 @@ export default class FetchCountryPoland extends Component {
                 <div>
                     <StyledWrapperTitle><StyledTitle style={{color:'white'}}>Dzisiejsze informacje o COVID-19 w Polsce.</StyledTitle></StyledWrapperTitle>
                     <UlStyl style={{paddingTop: '10px'}}>
-                        <LiStyl><b>Dzisiaj zarażeni: </b></LiStyl> <DescriptionStyl>{newConfirmed} osób</DescriptionStyl>
-                        <LiStyl><b>Dzisiejsze zgony:</b></LiStyl> <DescriptionStyl>{newDead} osób</DescriptionStyl>
-                        <LiStyl><b>Uzdrowieni:</b> </LiStyl> <DescriptionStyl>{newRecovery} osób</DescriptionStyl>
+                        <LiStyl><b>Dzisiaj zarażeni: </b></LiStyl> <DescriptionStyl>{activeNew} osób</DescriptionStyl>
+                        <LiStyl><b>Dzisiejsze zgony:</b></LiStyl> <DescriptionStyl>{newDeaths} osób</DescriptionStyl>
                     </UlStyl>
-
                     <UlStyl>
-                        <LiStyl><b>Wszyscy zarażeni:</b></LiStyl> <DescriptionStyl>{totalInfection} osób</DescriptionStyl>
-                        <LiStyl><b>Wszystkie zgony:</b></LiStyl> <DescriptionStyl> {totalDead} osób</DescriptionStyl>
-                        <LiStyl><b>Wszyscy uzdrowieni:</b></LiStyl> <DescriptionStyl>{totalRecovery} osób</DescriptionStyl>
+                        <LiStyl><b>Wszystkie zgony:</b></LiStyl> <DescriptionStyl> {totalDeaths} osób</DescriptionStyl>
+                        <LiStyl><b>Wszyscy zarażeni:</b></LiStyl> <DescriptionStyl>{active} osób</DescriptionStyl>
+                        <LiStyl><b>Wszyscy uzdrowieni:</b></LiStyl> <DescriptionStyl>{recovered} osób</DescriptionStyl>
+                        <LiStyl><b>Wszystkie testy:</b></LiStyl> <DescriptionStyl> {tests} testów</DescriptionStyl>
                     </UlStyl>
                 </div>
             )

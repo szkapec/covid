@@ -8,10 +8,10 @@ export default class FetchStatisticPoland extends Component {
     }
 
     componentDidMount(){
-        this.wykonaj()
+        this.addFetch()
     }
   
-    wykonaj = () => {
+    addFetch = () => {
         const api = 'https://api.covid19api.com/total/dayone/country/poland'
         try {
             fetch(api)
@@ -23,21 +23,22 @@ export default class FetchStatisticPoland extends Component {
             })
             .then(api => api.json())
             .then(api => {
+                console.log(api)
                 let tabsToChart = [];
-                for(var i=0; i<api.length; i=i+10){
+                for(var i=0; i<api.length; i=i+30){
                     tabsToChart.push(api[i])
                 }
                
                 this.setState({
                     firstDay: api.length,
                     tabsToChart,
-                    Chart0: parseInt(tabsToChart[0].Active),
-                    Chart1: tabsToChart[1].Active,
-                    Chart2: tabsToChart[2].Active,
-                    Chart3: tabsToChart[3].Active,
-                    Chart4: tabsToChart[4].Active,
-                    Chart5: tabsToChart[5].Active,
-                    Chart6: tabsToChart[6].Active,
+                    Chart0: api[api.length-60].Active,
+                    Chart1: api[api.length-50].Active,
+                    Chart2: api[api.length-40].Active,
+                    Chart3: api[api.length-30].Active,
+                    Chart4: api[api.length-20].Active,
+                    Chart5: api[api.length-10].Active,
+                    Chart6: api[api.length-5].Active,
                     toDay: api[api.length-1].Active,
                 })
             }).catch(err => {
@@ -52,8 +53,8 @@ export default class FetchStatisticPoland extends Component {
 
         return (
             <div>
-                    <StyledTitle>Ilość dni od rozpoczęcia pandemi w Polsce <StyledFirstDay>{this.state.firstDay}</StyledFirstDay></StyledTitle>
-                    <Chart item={this.state} legendPosition="top" titleText="Wykres 5 dni pogody" displayTitle bar pie line/>
+                <StyledTitle>Ilość dni od rozpoczęcia pandemi w Polsce <StyledFirstDay>{this.state.firstDay}</StyledFirstDay></StyledTitle>
+                <Chart item={this.state} legendPosition="top" titleText="Wykres 5 dni" displayTitle bar  line/>
             </div>
         )
     }

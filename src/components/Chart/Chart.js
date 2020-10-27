@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bar, Line, Pie } from 'react-chartjs-2';
-
+import styled from 'styled-components';
 class Chart extends React.Component {
 
     static defaultProps = {
@@ -11,23 +11,21 @@ class Chart extends React.Component {
     }
 
     render() {
-
-
             const {newDeaths,active,activeNew,recovered,total,day,totalDeaths,tests,
                 Chart0,Chart1,Chart2,Chart3,Chart4,Chart5,Chart6,toDay} = this.props.item;
         return (
             <>
-            <div className="chart">
+            <StyledChart className="chart">
            
 
 
             {this.props.bar&&<Bar
             data={{
-                labels: [Chart0?'1day':'Nowe zgony', Chart0?'10day':'Nowe przypadki', Chart0?'20day':'Aktywni', Chart3?'30day':'Wszyscy', 
-                Chart0?'40day':'wszystkie zgony', Chart0?'50day':'Wyzdrowiałych' , Chart0&&'60day', Chart0&&'toDay'] ,
+                labels: [Chart0?'-60day':'Nowe zgony', Chart0?'-50day':'Nowe przypadki', Chart0?'-40day':'Aktywni', Chart3?'-30day':'Wszyscy', 
+                Chart0?'-20day':'wszystkie zgony', Chart0?'-10day':'Wyzdrowiałych' , Chart0?'-5day':"brak", Chart0?'toDay':"blak"] ,
                 datasets: [
                     {
-                        label: 'Zainfekowanych osób wirusem Covid-19',
+                        label: 'Zainfekowanych osób wirusem Covid-19 (aktywnych)',
                         data: [
                             Chart0?Chart0:newDeaths,
                             Chart1?Chart1:activeNew,
@@ -151,7 +149,7 @@ class Chart extends React.Component {
                             Chart3?Chart3:total,
                             Chart4?Chart4:totalDeaths,
                             Chart5?Chart5:recovered,
-                            Chart6?Chart6:null,
+                            Chart6?Chart6:newDeaths,
                             toDay?toDay:null,
                         ],
                         backgroundColor: [
@@ -194,7 +192,7 @@ class Chart extends React.Component {
                }}
         />}
 
-            </div>
+            </StyledChart>
 
             </>
         )
@@ -202,3 +200,11 @@ class Chart extends React.Component {
 }
 
 export default Chart; 
+
+
+
+const StyledChart = styled.div`
+    margin: 10px auto;
+    width: 100%;
+    max-width: 800px;
+`

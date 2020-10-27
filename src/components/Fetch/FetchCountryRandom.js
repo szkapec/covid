@@ -15,10 +15,11 @@ export default class FetchCountryRandom extends Component {
         ,tests: '',
         error: true,
         countryApi: '',
+        population: '',
     }
 
     fetchCountry = () => {
-
+        console.log(this.state.country)
         fetch(`https://covid-193.p.rapidapi.com/statistics?country=${this.state.country}`, {
             "method": "GET",
             "headers": {
@@ -33,13 +34,14 @@ export default class FetchCountryRandom extends Component {
     })
     .then(api => api.json())
     .then(api => {
+     console.log(api)
        this.setState({
            error: true,
            active: api.response[0].cases.active,
            activeNew: api.response[0].cases.new,
            recovered: api.response[0].cases.recovered,
            total: api.response[0].cases.total,
-
+            population: api.response[0].population,
            day: api.response[0].day,
 
            totalDeaths: api.response[0].deaths.total,
@@ -60,6 +62,7 @@ export default class FetchCountryRandom extends Component {
 }
     changeInput = (e) => {
         if(e.target.value.length>3){
+            console.log(this.state.value)
             this.setState({
                 country: e.target.value,
                 
@@ -73,7 +76,7 @@ export default class FetchCountryRandom extends Component {
 
     render() {
 
-            const {country, active, activeNew, recovered, total, day, totalDeaths, newDeaths, tests, error, countryApi} = this.state;
+            const {country, active, activeNew, recovered, total, day, totalDeaths, newDeaths, tests, error, countryApi, population} = this.state;
         return (
             <div>
                 <StyledWrapper>
@@ -84,7 +87,7 @@ export default class FetchCountryRandom extends Component {
                 <StyledContainer>
                     
                 {countryApi!==""?<>
-                    
+                   
                     <StyledCard>
                     <StyledH2>Wyniki wyszukiwania dla: {countryApi}</StyledH2>
                             <StyledH3>Aktywne przypadki covid-19</StyledH3>
@@ -142,11 +145,29 @@ export default class FetchCountryRandom extends Component {
                             </StyledActive>
                             <StyledSpanLeft>
                                 <p style={{fontFamily:'Rancho'}}>{tests}</p>
-                                <p>Zrobione testy</p>
+                                <p>Zrobione <br/> testy</p>
                             </StyledSpanLeft>
                             <StyledSpanRight>
                                 <p style={{fontFamily:'Rancho'}}>{tests-tests/10}</p>
-                                <p>Ilość testów</p>
+                                <p>Ilość <br/> testów</p>
+                            </StyledSpanRight>
+                        </div>
+                    </StyledCard>
+
+
+                    <StyledCard>
+                    <StyledH3>Populacja</StyledH3>
+                        <div>
+                        <StyledActive>
+                            {population} wszystkich
+                            </StyledActive>
+                            <StyledSpanLeft>
+                                <p style={{fontFamily:'Rancho'}}>{active}</p>
+                                <p>Aktywnych covid</p>
+                            </StyledSpanLeft>
+                            <StyledSpanRight>
+                                <p style={{fontFamily:'Rancho'}}>{tests}</p>
+                                <p>Ilość <br/> testów</p>
                             </StyledSpanRight>
                         </div>
                     </StyledCard>
@@ -154,7 +175,7 @@ export default class FetchCountryRandom extends Component {
                     
                 </>: !error? `Nie ma takiego państwa "${country}"` : `Wpisz państwo`}
                 </StyledContainer>
-                {active!=="" && <Chart item={this.state} legendPosition="top" titleText="Wykres 5 dni pogody" displayTitle bar pie />}
+                {active!=="" && <Chart item={this.state} legendPosition="top" titleText="Wykres 5 dni pogody" displayTitle  pie />}
             </div>
         )
     }
@@ -228,6 +249,13 @@ const StyledWrapper = styled.div`
     max-width: 600px;
     margin: 40px auto;
     text-align: center;
+    button {
+        border: none;
+        outline: none;
+        margin: 20px 20px 0;
+        padding: 5px 10px;
+
+    }
 `
 
 const StyledH3 = styled.div`
